@@ -1,14 +1,57 @@
-<div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);">
-  <div class="container">
-    <h1 color: white><%= @list.name %></h1>
+<div class="navbar navbar-expand-sm navbar-light navbar-lewagon">
+  <div class="container-fluid">
+    <%= link_to "#", class: "navbar-brand" do %>
+      <%= image_tag "https://raw.githubusercontent.com/lewagon/fullstack-images/master/uikit/logo.png" %>
+    <% end %>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto">
+        <%# if user_signed_in? %>
+          <li class="nav-item active">
+            <%= link_to "My Lists", lists_path, class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "New List", new_list_path, class: "nav-link" %>
+          </li>
+          <li class="nav-item dropdown">
+            <%= image_tag "https://media.licdn.com/dms/image/C4D03AQEDolot7mAo5Q/profile-displayphoto-shrink_400_400/0/1547238296846?e=1721865600&v=beta&t=QVx2YsbTF87kLY8eHt1oJY79Yf3tjioO6h78myc4jrI", class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" }, 'aria-haspopup': true, 'aria-expanded': false %>
+            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <%= link_to "Action", "#", class: "dropdown-item" %>
+              <%= link_to "Another action", "#", class: "dropdown-item" %>
+              <%= link_to "Log out", "#", class: "dropdown-item", data: {turbo_method: :delete} %>
+              <%# link_to "Log out", destroy_user_session_path, class: "dropdown-item", data: {turbo_method: :delete} %>
+            </div>
+          </li>
+        <%# else %>
+          <!--li class="nav-item"-->
+            <%#= link_to "Login", new_user_session_path, class: "nav-link" %>
+          <!--/li-->
+        <%# end %>
+      </ul>
+    </div>
   </div>
 </div>
 
-<button class="mt-2 btn btn-info text-decoration-none"><%= link_to "Add a bookmark", new_list_bookmark_path(@list) %></button>
-
-  <% @list.bookmarks.each do |bookmark| %>
-    <h3><%= bookmark.movie.title %></h3>
-    <p><%= bookmark.comment %></p>
-    <img src="<%= bookmark.movie.poster_url %>" alt="<%= bookmark.movie.title %>" width="300">
-  <% end %>
+<div class="banner" style="height: 400px; background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');">
+  <div class="container">
+    <h1><%= @list.name %></h1>
+  </div>
 </div>
+
+
+<button class="button"><%= link_to "Add a bookmark", new_list_bookmark_path(@list) %></button>
+
+<% @list.bookmarks.each do |bookmark| %>
+<div class="card-bookmark">
+  <img src="<%= bookmark.movie.poster_url %>" alt="<%= bookmark.movie.title %>" />
+  <div class="card-bookmark-infos">
+    <h2><%= bookmark.movie.title %></h2>
+    <p><%= bookmark.comment %></p>
+    <%= link_to "delete", list_bookmark_path(@list, bookmark), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+  </div>
+</div>
+<% end %>
